@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+<title>Using the TdsMonitor Tool | THREDDS Documentation</title>
+<link rel="stylesheet" href="css/syntax.css">
+
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/modern-business.css">
+<link rel="stylesheet" href="css/lavish-bootstrap.css">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/theme-unidata.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="" href="www.unidata.ucar.edufeed.xml">
+
+  <script>
+    $(document).ready(function() {
+      // Initialize navgoco with default options
+      $("#mysidebar").navgoco({
+        caretHtml: '',
+        accordion: true,
+        openClass: 'active', // open
+        save: false, // leave false or nav highlighting doesn't work right
+        cookie: {
+          name: 'navgoco',
+          expires: false,
+          path: '/'
+        },
+        slide: {
+          duration: 400,
+          easing: 'swing'
+        }
+      });
+
+      $("#collapseAll").click(function(e) {
+        e.preventDefault();
+        $("#mysidebar").navgoco('toggle', false);
+      });
+
+      $("#expandAll").click(function(e) {
+        e.preventDefault();
+        $("#mysidebar").navgoco('toggle', true);
+      });
+
+    });
+  </script>
+  <script>
+    $(function() {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+  
+
+</head>
+
+<body>
+  <!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> THREDDS Documentation</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- entries without drop-downs appear here -->
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">THREDDS Source<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li><a href="https://github.com/Unidata/THREDDS" target="_blank">netCDF-Java and TDS Github Repo</a></li>
+                        
+                        
+                        
+                        <li><a href="https://github.com/Unidata/Rosetta" target="_blank">Rosetta Github Repo</a></li>
+                        
+                        
+                        
+                        <li><a href="https://github.com/Unidata/siphon" target="_blank">Siphon Github Repo</a></li>
+                        
+                        
+                    </ul>
+                </li>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorial<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li><a href="tds_tutorial_index.html">THREDDS Data Server Tutorial</a></li>
+                        
+                        
+                        
+                        <li><a href="netcdf_java_tutorial_index.html">netCDF-Java Tutorial</a></li>
+                        
+                        
+                    </ul>
+                </li>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">External Docs<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        
+                        
+                        <li><a href="https://www.unidata.ucar.edu/software/rosetta/docs/" target="_blank">Rosetta</a></li>
+                        
+                        
+                        
+                        <li><a href="https://siphon.readthedocs.io/en/latest/#" target="_blank">Siphon</a></li>
+                        
+                        
+                    </ul>
+                </li>
+                
+                
+                
+			<li><a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:support-thredds@unidata.ucar.edu?subject=THREDDS Documentation Feedback f eedback&body=I have some feedback about the Using the TdsMonitor Tool page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Feedback</a><li>
+
+		
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Using the TdsMonitor Tool">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="col-lg-12">&nbsp;</div>
+    <!-- Content Row -->
+    <div class="row">
+      <!-- Sidebar Column -->
+      <div class="col-md-3">
+
+        
+
+
+
+
+
+
+
+<ul id="mysidebar" class="nav">
+    <li class="sidebarTitle">TDS Tutorial 5.0.0</li>
+    
+    
+    
+        
+    
+    <li>
+        <a href="#">Getting Started with the TDS</a>
+        <ul>
+            
+            
+            
+            <li><a href="tds_tutorial_index.html">TDS Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="install_java_tomcat.html">Installing Java and Tomcat</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tomcat_dir_structure_qt.html">Tomcat Directory Structure</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="running_tomcat.html">Running Tomcat</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tomcat_log_files.html">Tomcat Log Files</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tomcat_configuration_files.html">Tomcat Config Files</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="deploying_the_tds.html">Deploying the TDS</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tomcat_manager_app.html">Tomcat Manager Application</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="where_to_go_from_here.html">Where to go from here</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Client Catalogs</a>
+        <ul>
+            
+            
+            
+            <li><a href="basic_client_catalog.html">Basic Client Catalog Primer</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="nested_datasets.html">Nested Datasets</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="client_catalog_metadata.html">Client Catalog Metadata</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="client_catalog_references.html">Catalog References</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="compound_service_elements.html">Compound service elements</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="client_catalog_xml_validation.html">XML Validation</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="client_catalog_via_toolsUI.html">Client Catalogs in ToolsUI</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">TDS Configuration</a>
+        <ul>
+            
+            
+            
+            <li><a href="tds_content_directory.html">TDS Content Directory</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="default_config_catalog.html">Default TDS Configuration Catalog</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="basic_config_catalog.html">Basics of Configuration Catalogs</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="basic_tds_configuration.html">Basic TDS Configuration</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="adding_ogc_iso_services.html">Adding OGC / ISO Services</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="adding_ncss.html">Adding the netCDF Subset Service</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Monitoring and Debugging</a>
+        <ul>
+            
+            
+            
+            <li><a href="tds_monitoring_and_debugging.html">TDS Monitoring and Debugging</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tomcat_and_tds_logs.html">Tomcat and TDS Logs</a></li>
+            
+            
+            
+            
+            
+            
+            <li class="active"><a href="using_the_tdsmonitor_tool.html">Using the TdsMonitor Tool</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="third_party_tools.html">3rd Party Tools</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">netCDF Markup Language (NcML)</a>
+        <ul>
+            
+            
+            
+            <li><a href="tds_basic_ncml_tutorial.html">Basic NcML Tutorial</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tds_ncml_aggregation.html">NcML Aggregation</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="using_ncml_in_the_tds.html">Using NcML in the TDS</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="basic_ncml_examples.html">Basic NcML Examples</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="ncml_aggregation_examples.html">NcML Aggregation Examples</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Feature Collections</a>
+        <ul>
+            
+            
+            
+            <li><a href="feature_collections_ref.html">Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="grib_feature_collections_ref.html">GRIB Feature Collections</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="grib_feature_collections.html">GRIB Feature Collection Tutorial</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="grib_files_cdm.html">GRIB Files in CDM</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="grib_tables_cdm.html">GRIB Tables in CDM</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="fmrc_ref.html">Forecast Model Run Collections (FMRC)</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="fmrc_tutorial.html">FMRC Tutorial</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Metadata</a>
+        <ul>
+            
+            
+            
+            <li><a href="thredds_metadata.html">THREDDS Metadata</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="iso_metadata.html">ISO Metadata Generation - ncIso</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Production Servers</a>
+        <ul>
+            
+            
+            
+            <li><a href="production_server_overview.html">Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="troubleshooting_problems.html">Troubleshooting Problems</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="performance_tips.html">Performance Tips</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="upgrade_to_5.html">Upgrading to 5.0</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="installation_checklist.html">Installation Checklist</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">FAQ</a>
+        <ul>
+            
+            
+            
+            <li><a href="tds_faq.html">FAQ</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Reference Guide</a>
+        <ul>
+            
+            
+            
+            <li><a href="tds_config_ref.html">TDS Config (threddsConfig.xml)</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="viewers_ref.html">Viewers</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="dataset_source_plugin.html">Data Source Plugins</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="wcs_ref.html">WCS Reference</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="wms_ref.html">WMS Reference</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="remote_management_ref.html">Remote Management Reference</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="netcdf_subset_service_ref.html">Netcdf Subset Service Reference</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tds_doc_guide.html">netCDF-Java and TDS Doc Guide</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="server_side_catalog_specification.html">Server-side Catalog Specification</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tds_dataset_scan_ref.html">Configuring TDS with DatasetScan</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="coverage_datasets.html">Coverage Datasets</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+        
+        <!-- if you aren't using the accordion, uncomment this block:
+           <p class="external">
+               <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+           </p>
+           -->
+    </li>
+</ul>
+</div>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+        <!-- Content Column -->
+        <div class="col-md-9">
+          <div class="post-header">
+   <h1 class="post-title-main">Using the TdsMonitor Tool</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+
+    
+
+    
+
+    
+
+    
+
+  <h2 id="setting-up-the-tdsmonitor-tool">Setting up the TdsMonitor tool</h2>
+
+<p>The <code class="highlighter-rouge">TdsMonitor</code> tool allows you to fetch remote <code class="highlighter-rouge">TDS</code> log files onto your local machine, and analyze them.</p>
+
+<div class="alert alert-warning" role="alert"><i class="fa fa-warning"></i> <b>Important:</b> 
+Access logs are tomcat-generated and can be found in <code class="highlighter-rouge">${tomcat_home}/logs/</code>.
+</div>
+
+<div class="alert alert-warning" role="alert"><i class="fa fa-warning"></i> <b>Important:</b> 
+Servlet logs are generated by the TDS and can be found in <code class="highlighter-rouge">${tds.content.root.path}/thredds/logs/</code>.
+</div>
+
+<h2 id="setup">Setup</h2>
+
+<ol>
+  <li>Make sure you have access logging enabled.
+    <ul>
+      <li>Open <code class="highlighter-rouge">${tomcat_home}/conf/server.xml</code> and uncomment the AccessLogValve in the Host.
+Modify the pattern attribute as per these instructions.</li>
+      <li>Browse your installation of the TDS to generate some entries in the access logs.</li>
+    </ul>
+  </li>
+  <li>Make sure you have the TDS servlet logging enabled.
+    <ul>
+      <li>This is turned on by default in the <code class="highlighter-rouge">log4j.xml</code> file.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Give yourself the access to the <code class="highlighter-rouge">TdsMonitor</code> tool.
+Modify <code class="highlighter-rouge">${tomcat_home}/conf/tomcat-users.xml</code> to add a new role with the <code class="highlighter-rouge">rolename</code> attribute of <code class="highlighter-rouge">tdsMonitor</code> and add this role to your list of roles:</p>
+
+    <div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;tomcat-users&gt;</span>      
+  <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">"manager"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">"tdsConfig"</span><span class="nt">/&gt;</span>      
+  <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">"tdsMonitor"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;user</span> <span class="na">name=</span><span class="s">"admin"</span> <span class="na">password=</span><span class="s">"e5e9fa1ba31ecd1ae84f75caaa474f3a663f05f4"</span>
+        <span class="na">roles=</span><span class="s">"manager,tdsConfig,tdsMonitor"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/tomcat-users&gt;</span>
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>Download the <code class="highlighter-rouge">ToolsUI</code> jar file and start the <code class="highlighter-rouge">TdsMonitor</code> tool.
+Download the ToolsUI.jar file to some convenient place on your local drive.</p>
+
+    <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">pwd</span>
+/home/tds
+
+<span class="gp">$ </span>ls -l
+-rw-r--r-- 1 tds ustaff 26235155 Oct 18 20:44 toolsUI-4.5.jar
+</code></pre>
+    </div>
+
+    <p>Start the <code class="highlighter-rouge">TdsMonitor</code> program by running the following command:</p>
+
+    <div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>java -Xmx4g -classpath toolsUI-4.5.jar thredds.ui.monitor.TdsMonitor
+</code></pre>
+    </div>
+
+    <p>You should see TdsMonitor start:</p>
+  </li>
+</ol>
+
+<p>Download the current logs files into the TdsMonitor tool.
+Type localhost:8080 into the server comboBox
+Select all 3 buttons access logs, server logs, and data roots.
+Press Download
+You should get a security challenge:</p>
+
+<p>Type in your username and password.
+You should see messages showing up in the text area:</p>
+
+<p>The files will be stored in $USER_HOME/tdsMonitor/localhost%3A8080. For production servers, you will need to manage the large number of logs stored here.</p>
+
+<p>The server name will be stored permanently for future use. To remove unwanted servers, right click inside the server comboBox, select Delete, and then click on the server names you want to delete.</p>
+
+<p>Viewing the Tomcat access logs
+Switch to the AccessLogs tab, and select localhost:8080, which will make the Start Date and End Date fields get filled out. Press the get logs button , and the logs in the selected time range are read in:</p>
+
+<p>Each log entry in the access logs is a row in the table. You can rearrange the columns by dragging on the column headers. You can sort by column by clicking on the column headers.</p>
+
+<p>Select a row, and right click to bring up the context menu. Choose “Resend URL” which takes you to the UrlDump screen. Choose “Get” and the URL will be resent to the server, and the results shown in the text area:</p>
+
+<p>Go to the User tab, and reverse sort by count (click on count column header twice), to see a summary of log access records by IP address. Press the lookup DNS button  to do reverse DNS lookup on the IP address (this is very slow, and you have to scroll the table to force a refresh).</p>
+
+<p>Select a user, then right click to get the context menu. Select “User requests”, which takes you back to the LogTable screen, but only shows the logs that are from the selected user. Press show All logs button  to get back to showing all the logs.</p>
+
+<p>Similarly, the Service tab shows the logs summarized by service, and you can drill down to see the individual access calls for a specific service.</p>
+
+<p>Similarly, the DataRoot tab shows the logs summarized by data root, and you can drill down to see the individual access calls for a specific data root. For this to work correctly, you must have selected data roots in the ManageLogs when downloading. This will download the dataroot file to $USER_HOME/tdsMonitor/localhost%3A8080/roots.txt. You should refresh it whenever the data roots change on your server.</p>
+
+<p>Go to the TimeSeries tab:</p>
+
+<p>This gives a summary of activity on your server for the selected time period, using 5 minute intervals. The total number of requests, total Mbytes sent, and Average Latency in each 5 minute interval are shown.</p>
+
+<p>Viewing the TDS servlet logs
+The TDS Servlet logs are for debugging and are more low-level than the access logs. They are also bigger and you will want to be careful about examining a manageable subset of them at any one time.</p>
+
+<p>Switch to the ServletLogs tab, and select localhost:8080, which will make the Start Date and End Date fields get filled out. Press the get logs button , and the logs in the selected time range are read in:</p>
+
+<p>The LogTable shows the raw data. You almost always want to look just at the Merged logs, by choosing the Merge tab. For illustration purposes, we have switched to a larger set of logs from motherlode server:</p>
+
+<p>The top table shows groups of logs which are continuous in their reqSeq numbers, so each group indicates that the TDS web application (and/or Tomcat) was restarted between the endDate and startDate of the subsequent group. Select one of these groups to see the logs that are in that group in the lower table.</p>
+
+<p>As with the access log tables, you can rearrange and sort on the columns. Reverse sort on the extra column (by clicking on it twice) to show the logs that have extra information. In this example:</p>
+
+<p>Select one of the rows with extra information, and click on it to bring up the information about that request:</p>
+
+<p>This shows all the information about request 294. The first line shows the information when the request first arrived at the server:</p>
+
+<p>2010-11-03T18:14:15	ISO date/time of the request
+[312059]	msecs since server start
+[294]	request number
+INFO	type of log message
+thredds.server.opendap.OpendapServlet	servlet handling the request
+(174.100.87.24)	IP address
+/thredds/dodsC/nexrad/level2/IDD/KCLE/</p>
+
+<p>20101103/Level2_KCLE_20101103_2356.ar2v.dds</p>
+
+<p>request path
+The second two lines show warning messages from the IOSP that opened the file. In general, problems will be recorded here, and there may be times when Unidata support will ask you to forward this information to them in order to diagnose issues.</p>
+
+<p>The last line shows the closing message after the request has been completed:</p>
+
+<p>2010-11-03T18:14:15	ISO date/time the request was completed
+[312336]	msecs since server start
+[294]	request number
+INFO	type of log message
+thredds.server.opendap.OpendapServlet	servlet handling the request
+200	HTTP status return
+-1	size in bytes of returned content
+227	total request time in msecs
+In this case, the result was handled successfully (status return 200), and took 227 msecs. The size is often not known in these logs, indicated by a -1. As you can see, all of the pertinent information is summarized in the table row. Looking at the complete information is usually only done to see what the “extra” log messages are.</p>
+
+<p>The Undone and Misc tabs are used to record messages that don’t have a proper start and end message, and are generally only useful to TDS support.</p>
+
+
+    <div class="tags">
+        
+    </div>
+
+    
+
+</div>
+
+        </div>
+      </div>
+      <footer>
+  <div class="row is-flex">
+    <div class="col-sm-3">
+      <div class="triptych-left">
+        <div class="footer-logos">
+          <a class="noicon" href="https://unidata.ucar.edu/software/tds/"> <img alt="TDS" src="images/thredds_tds-32x32.png"/></a>
+        </div>
+        <p class="triptych-header">THREDDS</p>
+        <ul>
+          <li>
+            
+            <span>Page last updated:<br /></span> April 2, 2018
+            
+          </li>
+          <li>
+            Documentation site last generated:<br /> April 19, 2018
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="triptych-center">
+        <div class="footer-logos">
+          <a class="noicon" href="https://www.nsf.gov/"> <img alt="NSF" src="images/nsf_logo_transparent.png"/></a>
+        </div>
+        <div class="footer-logos" style="padding-right: 1em;">
+          <a class="noicon" href="https://www.ucp.ucar.edu"> <img alt="UCP" src="images/ucp-logo2_transparent.png"/></a>
+        </div>
+        <p class="triptych-header">Unidata</p>
+          <p class="triptych-center">
+            Unidata is a member of the
+            <a href="https://www.ucp.ucar.edu/">UCAR Community Programs</a>, managed by the
+            <a href="https://www.ucar.edu">University Corporation for Atmospheric Research</a>, and funded by the
+            <a href="https://www.nsf.gov">National Science Foundation</a>.
+          </p>
+          <p class="triptych-center">
+            Read Unidata's
+            <a href="https://www.unidata.ucar.edu/legal/participation.html">Participation Policy</a>.
+          </p>
+            <table class="triptych-center">
+              <tr>
+                <td style="width:33%;text-align:left;">&copy;2018 UCAR</td>
+                <td style="width:33%;text-align:center;">
+                  <a href="https://www2.ucar.edu/privacy-policy">Privacy Policy</a>
+                </td>
+                <td style="width:33%;text-align:right;">
+                  <a href="https://www2.ucar.edu/terms-of-use">Terms of Use</a>
+                </td>
+              </tr>
+            </table>
+      </div>
+    </div>
+
+    <div class="col-sm-3">
+      <div class="triptych-right">
+        <div class="footer-logos">
+          <a class="noicon" href="https://unidata.ucar.edu/"> <img alt="TDS" src="images/unilogo-32x32.png"/></a>
+        </div>
+        <p class="triptych-header">Contact Unidata</p>
+        <ul>
+          <li>
+            For support:
+              <a href="mailto:support@unidata.ucar.edu">support@unidata.ucar.edu</a>
+          </li>
+          <li>
+            By
+              <a href="https://www.unidata.ucar.edu/about/index.html#visit">postal mail</a>
+            or
+              <a href="https://www.unidata.ucar.edu/about/index.html#visit">in person</a>
+          </li>
+          <li>
+            About this website:
+              <a href="mailto:plaza@unidata.ucar.edu">plaza@unidata.ucar.edu</a>
+          </li>
+          <li>
+            By telephone:
+            303.497.8643
+          </li>
+        </ul>
+
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</body>
+ <!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-92978945-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+ 
+
+</html>
